@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/healthz")
 public class Health {
 
+    // assignment 1 api
     @GetMapping()
     public HealthStatus getHealthz() {
         return new HealthStatus("äll good");
