@@ -2,7 +2,7 @@ package com.csye6225.application.objects;
 public class HealthStatus {
 
     private String status;
-
+// test
     public HealthStatus(String status){
         this.status = status;
     }
