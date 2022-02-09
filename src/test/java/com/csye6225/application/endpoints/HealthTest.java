@@ -24,6 +24,6 @@ class HealthTest {
 
     @Test
     public void testHealthStatus(){
-        assertEquals(health.getHealthz(),"äll good");
+        assertEquals(health.getHealthz().getStatus(),"äll good");
     }
 }
