@@ -18,8 +18,3 @@ jobs:
       - name: Build with Maven
         run: mvn --batch-mode --update-snapshots verify
         
-#       # Runs a set of commands using the runners shell
-#       - name: Run a mul
-#         run: |
-#           echo Add other actions to build,
-#           echo test, and deploy your project.
