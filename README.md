@@ -5,7 +5,7 @@ This project would require **Java 8** and **Maven** to be set up.
 To set up maven use the tutorial in the link : https://www.baeldung.com/install-maven-on-windows-linux-mac
 
 ## Steps to run the application.
-Use the command line/terminal to navigate to the project folder.
+Use the command line/terminal to navigate to the project folder
 
 - To build use 
 ```
