@@ -1,6 +1,7 @@
 package com.csye6225.application.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.parameters.P;
@@ -48,7 +49,10 @@ public class RequestFilter extends OncePerRequestFilter {
                 );
                 usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+            }else {
+                httpServletResponse.setStatus(HttpStatus.FORBIDDEN.value());
             }
+
 
         }
         filterChain.doFilter(httpServletRequest,httpServletResponse);
