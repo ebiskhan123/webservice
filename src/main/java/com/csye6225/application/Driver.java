@@ -6,9 +6,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+
 
 @SpringBootApplication
 @ComponentScan(basePackages = { "com.csye6225.*"})
+@EnableJpaRepositories
 public class Driver {
     private static final Logger LOGGER = LoggerFactory.getLogger(Driver.class);
     public static void main(String[] args) {
@@ -17,10 +20,7 @@ public class Driver {
     }
 }
 
-// update get user self
 
-// health remove auth
-//validate username
-// encrypting
-// unauthorized
+
+
 

@@ -1,4 +1,4 @@
-package com.csye6225.application.security;
+package com.csye6225.application.objects;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

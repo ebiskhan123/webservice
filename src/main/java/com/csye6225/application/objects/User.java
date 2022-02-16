@@ -8,6 +8,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.util.Date;
 
 @Getter
@@ -35,6 +36,7 @@ public class User {
     private String lastName;
 
     @Column(name = "username", nullable = false,updatable = false)
+    @Email
     private String username;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

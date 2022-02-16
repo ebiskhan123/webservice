@@ -13,13 +13,16 @@ spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     username: root
-    password: ---
+    password: ${dbpwd}
     url: jdbc:mysql://localhost:3306/cloudservicedb
 server:
   port: 8081
 
 logging.config:
   classpath: log4j2.xml
+
+encryption:
+  salt: ${salt}
 #  spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 #  spring.jpa.database-platform=org.hibernate.dialect.MySQL5InnoDBDialect
 #  spring.jpa.hibernate.ddl-auto=update

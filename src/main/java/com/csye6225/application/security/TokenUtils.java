@@ -33,10 +33,8 @@ public class TokenUtils {
     }
 
     public String extractPassword(String token){
-        System.out.println(token);
         token = getToken(token);
         String decodedToken = decodeToken(token);
-        System.out.println(decodedToken);
         return decodedToken.split(":")[1];
     }
 
