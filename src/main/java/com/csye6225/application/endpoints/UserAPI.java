@@ -1,5 +1,6 @@
 package com.csye6225.application.endpoints;
 
+import com.csye6225.application.objects.ErrorResponse;
 import com.csye6225.application.objects.User;
 import com.csye6225.application.objects.UserDTO;
 import com.csye6225.application.repository.UserRepository;
@@ -14,6 +15,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
+
+import javax.xml.bind.ValidationException;
 
 @Service
 @RestController
@@ -49,9 +52,9 @@ public class UserAPI {
                 User userLatest = userRepository.findByUsername(user.getUsername());
                 return ResponseEntity.status(HttpStatus.CREATED).body(userLatest);
             } else
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("username already exists, try a different one"));
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Unable to create user, check if input data is correct"));
         }
     }
 
@@ -61,20 +64,19 @@ public class UserAPI {
     public ResponseEntity updateUser(@RequestBody User user , @RequestHeader("Authorization") String basicToken){
         try {
             if(!tokenUtils.extractUserName(basicToken).equals(user.getUsername())){
-                System.out.println(tokenUtils.extractUserName(basicToken.split(" ")[1]));
-                return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+//                System.out.println(tokenUtils.extractUserName(basicToken.split(" ")[1]));
+                return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Credentials do not match the user being updated");
             }
-
             User presentUser = userRepository.findByUsername(user.getUsername());
             if (presentUser != null) {
                 user.setId(presentUser.getId());
                 user.setPassword(passwordEncoder.encode(salt + user.getPassword()));
-                System.out.println(user);
+//                System.out.println(user);
                 userRepository.save(user);
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
             }
         }catch (Exception e){
-            return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Unable to update data, check if data entered is of the correct "));
         }
         return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
@@ -92,7 +94,7 @@ public class UserAPI {
 //            ResponseEntity.status(404).body(null);
 //        }
 //        UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-//        String jwt = tokenUtils.generrateToken(userDetails);
+//        String jwt = tokenUtils.generateToken(userDetails);
 //        return ResponseEntity.status(HttpStatus.ACCEPTED).body( new AuthenticationResponse(jwt));
 //    }
 
@@ -104,7 +106,7 @@ public class UserAPI {
         String username = tokenUtils.extractUserName(basicToken);
         User user = userRepository.findByUsername(username);
         if(user ==null)
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body( null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body( new ErrorResponse("User not found"));
         UserDTO userDTO = UserDTO.builder().firstName(user.getFirstName()).lastName(user.getLastName()).
                 account_created(user.getAccount_created()).account_updated(user.getAccount_updated()).id(user.getId())
                 .username(user.getUsername()).build();

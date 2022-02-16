@@ -34,9 +34,9 @@ public class User {
 
     private String firstName;
     private String lastName;
-
+//^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$
     @Column(name = "username", nullable = false,updatable = false)
-    @Email
+    @Email()
     private String username;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
