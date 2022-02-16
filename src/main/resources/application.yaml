@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: assignment2
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+#    properties:
+#      hibernate:
+#        format_sql: true
+#        dialect: org.hibernate.dialect.MySQL57InnoDBDialect
+#    show-sql: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: root
+    password: ---
+    url: jdbc:mysql://localhost:3306/cloudservicedb
+server:
+  port: 8081
+
+logging.config:
+  classpath: log4j2.xml
+#  spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+#  spring.jpa.database-platform=org.hibernate.dialect.MySQL5InnoDBDialect
+#  spring.jpa.hibernate.ddl-auto=update
+#  spring.datasource.driverClassName=com.mysql.cj.jdbc.Driver
+#  spring.datasource.url=jdbc:mysql://localhost:3306/test
+#  spring.datasource.username=test
+#  spring.datasource.password=
+
