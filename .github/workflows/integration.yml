@@ -17,22 +17,26 @@ jobs:
 #        run: mvn --batch-mode --update-snapshots test
 #      - name: Build with Maven
 #        run: mvn --batch-mode --update-snapshots install
-  zip_code:
-#    needs: build
+#  zip_code:
+##    needs: build
+#    runs-on: ubuntu-latest
+#    name: Zip Application Code
+#    steps:
+#      - name: Step 1 - Checkout code
+#        uses: actions/checkout@v2
+#      - name: zip files
+#        run: zip -r webservice.zip ./
+#      - name: print contents
+#        run: echo $(ls)
+  validation:
+#    needs: zip_code
     runs-on: ubuntu-latest
-    name: Zip Application Code
+    name: Packer Template Validation
     steps:
       - name: Step 1 - Checkout code
         uses: actions/checkout@v2
       - name: zip files
         run: zip -r webservice.zip ./
-      - name: print contents
-        run: echo $(ls)
-  validation:
-    needs: zip_code
-    runs-on: ubuntu-latest
-    name: Packer Template Validation
-    steps:
       - name: print contents
         run: echo $(ls)
       - name: Action - Checkout
