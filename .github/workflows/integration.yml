@@ -44,8 +44,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: zip files
-        run: |
-          zip -r webservice.zip ./
+        run: zip -r webservice.zip ./
   packer_build:
     needs: zip_code
     runs-on: ubuntu-latest
