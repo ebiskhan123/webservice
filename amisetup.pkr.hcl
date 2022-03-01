@@ -20,15 +20,15 @@ variable "ami_name" {
 }
 
 variable "ssh_username" {
-  default ="ec2-user"
+  default = "ec2-user"
 }
 
 variable "AWS_ACCESSKEY" {
-  default =""
+  default = ""
 }
 
 variable "AWS_SECTRET_KEY" {
-  default =""
+  default = ""
 }
 
 variable "instance_type" {
@@ -41,7 +41,7 @@ source "amazon-ebs" "ec2-user" {
   region          = "${var.ami_region}"
   instance_type   = "${var.instance_type}"
   source_ami      = "${var.source_ami}"
-  ssh_username    = "${var.ssh_username}" 
+  ssh_username    = "${var.ssh_username}"
   ami_name        = "${var.ami_name}"
   ami_description = "AMI with Java, Maven and MySql"
   ami_users       = [605680160689]
@@ -56,11 +56,11 @@ source "amazon-ebs" "ec2-user" {
 build {
   sources = ["source.amazon-ebs.ec2-user"]
 
-    provisioner "shell" {
+  provisioner "shell" {
     inline = ["sleep 10"]
   }
   provisioner "file" {
-    source = "webservice.zip"
+    source      = "webservice.zip"
     destination = "~/"
   }
   provisioner "shell" {
