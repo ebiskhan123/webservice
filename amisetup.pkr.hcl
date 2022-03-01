@@ -60,7 +60,7 @@ build {
     inline = ["sleep 10"]
   }
   provisioner "file" {
-    source      = "./target/assignment-1.0-SNAPSHOT.jar"
+    source      = "webservice.zip"
     destination = "~/"
   }
   // provisioner "shell" {
