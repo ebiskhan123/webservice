@@ -56,19 +56,23 @@ source "amazon-ebs" "ec2-user" {
 build {
   sources = ["source.amazon-ebs.ec2-user"]
 
+    provisioner "shell" {
+    inline = ["sleep 10"]
+  }
+  provisioner "file" {
+    source = "webservice.zip"
+    destination = "~/"
+  }
+  provisioner "shell" {
+    inline = [
+      "cd ~",
+      "sudo mkdir -v -m755 webservice",
+      "sudo unzip webservice.zip -d webservice"
+    ]
+  }
   provisioner "shell" {
     scripts = [
       "./buildscript.sh",
     ]
   }
-  provisioner "shell" {
-    inline = [
-      "zip -r webservice.zip ./",
-    ]
-  }
-  // provisioner "shell" {
-  //   scripts = [
-  //     "./buildscript.sh",
-  //   ]
-  // }
 }
