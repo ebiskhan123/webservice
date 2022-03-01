@@ -62,13 +62,13 @@ build {
     ]
   }
   provisioner "shell" {
-    scripts = [
-      "./buildscript.sh",
+    inline = [
+      "zip -r webservice.zip ./",
     ]
   }
-  provisioner "shell" {
-    scripts = [
-      "./buildscript.sh",
-    ]
-  }
+  // provisioner "shell" {
+  //   scripts = [
+  //     "./buildscript.sh",
+  //   ]
+  // }
 }
