@@ -36,6 +36,8 @@ variable "instance_type" {
 }
 
 source "amazon-ebs" "ec2-user" {
+  access_key      = "${var.AWS_ACCESSKEY}"
+  secret_key      = "${var.AWS_SECTRET_KEY}"
   region          = "${var.ami_region}"
   instance_type   = "${var.instance_type}"
   source_ami      = "${var.source_ami}"
@@ -47,13 +49,23 @@ source "amazon-ebs" "ec2-user" {
   //   device_name = "/dev/sda1"
   //   volume_size = 40
   //   volume_type = "gp2"
-  //   delete_on_termination = true
+  //   delete_on_termination = true   amisetup.auto.pkrvars.hcl
   // }
 }
 
 build {
   sources = ["source.amazon-ebs.ec2-user"]
 
+  provisioner "shell" {
+    scripts = [
+      "./buildscript.sh",
+    ]
+  }
+  provisioner "shell" {
+    scripts = [
+      "./buildscript.sh",
+    ]
+  }
   provisioner "shell" {
     scripts = [
       "./buildscript.sh",
