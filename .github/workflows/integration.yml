@@ -1,0 +1,53 @@
+name: CI
+on:
+  push:
+    branches: [feature/a4]
+jobs:
+  validation:
+    runs-on: ubuntu-latest
+    name: Packer Template Validation
+    steps:
+      - name: Action - Checkout
+        uses: actions/checkout@v2
+      - name: Init Packer
+        uses: hashicorp/packer-github-actions@master
+        with:
+          command: init
+          target: application-ami.pkr.hcl
+#      - name: Validate Template
+#        uses: hashicorp/packer-github-actions@master
+#        with:
+#          command: validate
+#          arguments: -var-file=amisetup.auto.pkrvars.hcl
+#          target: amisetup.pkr.hcl
+  zip_code:
+    needs: validation
+    runs-on: ubuntu-latest
+    name: Zip Application Code
+    steps:
+      - name: Step 1 - Checkout code
+        uses: actions/checkout@v2
+
+      - name: zip files
+        run: |
+          zip -r webservice.zip ./
+  packer_build:
+    needs: zip_code
+    runs-on: ubuntu-latest
+    name: Packer Build AMI
+    steps:
+      - name: Step 1 - Checkout code
+        uses: actions/checkout@v2
+      - name: Step 2 - Packer Init
+        uses: hashicorp/packer-github-actions@master
+        with:
+          command: init
+          target: amisetup.pkr.hcl
+      - name: Step 3 - Build Artifact
+        uses: hashicorp/packer-github-actions@master
+        with:
+          command: build
+          arguments: -var=AWS_ACCESSKEY=${{ secrets.AWS_ACCESS_KEY_ID }} -var=AWS_SECTRET_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} -var-file=amisetup.auto.pkrvars.hcl -on-error=abort
+          target: amisetup.pkr.hcl
+        env:
+          PACKER_LOG: 1

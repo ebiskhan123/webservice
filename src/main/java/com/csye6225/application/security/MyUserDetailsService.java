@@ -21,8 +21,8 @@ public class MyUserDetailsService implements UserDetailsService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    @Value("${encryption.salt}")
-    private String salt;
+//    @Value("${encryption.salt}")
+//    private String salt;
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
@@ -32,7 +32,7 @@ public class MyUserDetailsService implements UserDetailsService {
 
     public boolean validateUser(String username, String password){
         com.csye6225.application.objects.User user =  userRepository.findByUsername(username);
-        if(user == null || !username.equals(user.getUsername()) || !passwordEncoder.matches(salt + password,user.getPassword())){
+        if(user == null || !username.equals(user.getUsername()) || !passwordEncoder.matches( password,user.getPassword())){
             return false;
         }
         return true;

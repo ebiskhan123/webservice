@@ -26,11 +26,11 @@ public class UserAPI {
     @Autowired
     UserRepository userRepository;
 
-    @Autowired
-    AuthenticationManager authenticationManager;
-
-    @Autowired
-    MyUserDetailsService userDetailsService;
+//    @Autowired
+//    AuthenticationManager authenticationManager;
+//
+//    @Autowired
+//    MyUserDetailsService userDetailsService;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -38,15 +38,16 @@ public class UserAPI {
     @Autowired
     TokenUtils tokenUtils;
 
-    @Value("${encryption.salt}")
-    private String salt;
+//    @Value("${encryption.salt}")
+//    private String salt;
 
     @PostMapping(value = "/user",
             consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity createUser(@RequestBody User user){
         try {
-            user.setPassword(passwordEncoder.encode(salt + user.getPassword()));
+            user.setPassword(passwordEncoder.encode( user.getPassword()));
+            User temp = userRepository.findByUsername(user.getUsername());
             if (userRepository.findByUsername(user.getUsername()) == null) {
                 userRepository.save(user);
                 User userLatest = userRepository.findByUsername(user.getUsername());
@@ -70,7 +71,7 @@ public class UserAPI {
             User presentUser = userRepository.findByUsername(user.getUsername());
             if (presentUser != null) {
                 user.setId(presentUser.getId());
-                user.setPassword(passwordEncoder.encode(salt + user.getPassword()));
+                user.setPassword(passwordEncoder.encode( user.getPassword()));
 //                System.out.println(user);
                 userRepository.save(user);
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
