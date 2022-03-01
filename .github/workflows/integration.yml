@@ -39,8 +39,8 @@ jobs:
         run: zip -r webservice.zip ./
       - name: print contents
         run: echo $(ls)
-      - name: Action - Checkout
-        uses: actions/checkout@v2
+#      - name: Action - Checkout
+#        uses: actions/checkout@v2
       - name: Init Packer
         uses: hashicorp/packer-github-actions@master
         with:
