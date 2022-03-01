@@ -66,8 +66,8 @@ jobs:
     runs-on: ubuntu-latest
     name: Packer Build AMI
     steps:
-      - name: Step 1 - Checkout code
-        uses: actions/checkout@v2
+#      - name: Step 1 - Checkout code
+#        uses: actions/checkout@v2
       - name: Step 2 - Packer Init
         uses: hashicorp/packer-github-actions@master
         with:
