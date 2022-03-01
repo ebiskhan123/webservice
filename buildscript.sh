@@ -12,9 +12,9 @@ sudo yum -y update
 
 # Install node version
 # nvm install 14
-sudo yum install java-1.8.0-openjdk
+sudo yum -y install java-1.8.0-openjdk
 
-sudo yum install maven
+sudo yum -y install maven
 # java -version
 
 echo java -version | awk '/version/{print $NF}'
@@ -57,12 +57,12 @@ export dbpwd=Mypassword@123
 echo 'Environment variable set for dbpwd as : '
 printenv dbpwd
 
-#mysql -u root -p "Mypassword@123" -e create_db.sql
+#mysql -u root -p "Mypassword@123" -e "show databases;"
 
 # mysql -u 'root' --password=$temp_password  -e 'alter user root@localhost identified by mypassword;'
 
 # mysql -uroot -p
-
+#mysql -u root -p "Mypassword@123" -e "show variables where Variable_name like '%host%';"
 # echo 'l9U,35+sDBkz' | mysql -u root -p
 # expect "Enter password:"
 # echo 'l9U,35+sDBkz'
@@ -73,23 +73,3 @@ printenv dbpwd
 
 # mysql.server start
 # mysql -u root -e "SET PASSWORD FOR root@'localhost' = PASSWORD('admin');"
-
-# get the required version
-# sudo tee /etc/yum.repos.d/pgdg.repo<<EOF
-# [pgdg12]
-# name=PostgreSQL 12 for RHEL/CentOS 7 - x86_64
-# baseurl=https://download.postgresql.org/pub/repos/yum/12/redhat/rhel-7-x86_64
-# enabled=1
-# gpgcheck=0    l9U,35+sDBkz
-# EOF
-
-# install version 12
-# sudo yum install -y postgresql12 postgresql12-server
-
-# init db
-# sudo /usr/pgsql-12/bin/postgresql-12-setup initdb
-
-# enable and start service with --now
-# sudo systemctl enable --now postgresql-12
-
-# systemctl status postgresql-12

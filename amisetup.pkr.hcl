@@ -45,12 +45,6 @@ source "amazon-ebs" "ec2-user" {
   ami_name        = "${var.ami_name}"
   ami_description = "AMI with Java, Maven and MySql"
   ami_users       = [605680160689]
-  // launch_block_device_mappings {
-  //   device_name = "/dev/sda1"
-  //   volume_size = 40
-  //   volume_type = "gp2"
-  //   delete_on_termination = true   amisetup.auto.pkrvars.hcl
-  // }
 }
 
 build {

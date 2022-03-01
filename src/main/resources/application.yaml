@@ -13,7 +13,7 @@ spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     username: root
-    password: ${dbpwd}  # Pokemon@123  mvn test -Dspring.datasource.password=Pokemon@123
+    password:  Mypassword@123  #   mvn test -Dspring.datasource.password=<>
     url: jdbc:mysql://localhost:3306/cloudservicedb
 server:
   port: 8081
