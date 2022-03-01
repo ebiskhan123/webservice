@@ -60,16 +60,16 @@ build {
     inline = ["sleep 10"]
   }
   provisioner "file" {
-    source      = "webservice.zip"
+    source      = "./target/assignment-1.0-SNAPSHOT.jar"
     destination = "~/"
   }
-  provisioner "shell" {
-    inline = [
-      "cd ~",
-      "sudo mkdir -v -m755 webservice",
-      "sudo unzip webservice.zip -d webservice"
-    ]
-  }
+  // provisioner "shell" {
+  //   inline = [
+  //     "cd ~",
+  //     "sudo mkdir -v -m755 webservice",
+  //     "sudo unzip webservice.zip -d webservice"
+  //   ]
+  // }
   provisioner "shell" {
     scripts = [
       "./buildscript.sh",
