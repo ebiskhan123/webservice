@@ -17,7 +17,17 @@ jobs:
 #        run: mvn --batch-mode --update-snapshots test
 #      - name: Build with Maven
 #        run: mvn --batch-mode --update-snapshots verify
+  zip_code:
+#    needs: validation
+    runs-on: ubuntu-latest
+    name: Zip Application Code
+    steps:
+      - name: Step 1 - Checkout code
+        uses: actions/checkout@v2
+      - name: zip files
+        run: zip -r webservice.zip ./
   validation:
+    needs: zip_code
     runs-on: ubuntu-latest
     name: Packer Template Validation
     steps:
@@ -28,21 +38,21 @@ jobs:
         with:
           command: init
           target: amisetup.pkr.hcl
-#      - name: Validate Template
-#        uses: hashicorp/packer-github-actions@master
-#        with:
-#          command: validate
-#          arguments: -var-file=amisetup.auto.pkrvars.hcl
-#          target: amisetup.pkr.hcl
-  zip_code:
-    needs: validation
-    runs-on: ubuntu-latest
-    name: Zip Application Code
-    steps:
-      - name: Step 1 - Checkout code
-        uses: actions/checkout@v2
-      - name: zip files
-        run: zip -r webservice.zip ./
+      - name: Validate Template
+        uses: hashicorp/packer-github-actions@master
+        with:
+          command: validate
+          arguments: -var-file=amisetup.auto.pkrvars.hcl
+          target: amisetup.pkr.hcl
+#  zip_code:
+#    needs: validation
+#    runs-on: ubuntu-latest
+#    name: Zip Application Code
+#    steps:
+#      - name: Step 1 - Checkout code
+#        uses: actions/checkout@v2
+#      - name: zip files
+#        run: zip -r webservice.zip ./
   packer_build:
     needs: zip_code
     runs-on: ubuntu-latest
