@@ -1,10 +1,10 @@
 cd ~
 cd webservice
 sudo mvn install -DskipTests=true
-sudo chmod 777 /target/assignment-1.0-SNAPSHOT.jar
+sudo chmod 777 ./target/assignment-1.0-SNAPSHOT.jar
 cd ..
 echo '#!/bin/bash 
-java -jar /webservice/target/assignment-1.0-SNAPSHOT.jar' > runjar.sh
+java -jar home/ec2-user/webservice/target/assignment-1.0-SNAPSHOT.jar' > runjar.sh
 
 sudo chmod 777 runjar.sh
 
