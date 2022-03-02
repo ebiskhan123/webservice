@@ -44,7 +44,7 @@ source "amazon-ebs" "ec2-user" {
   ssh_username    = "${var.ssh_username}"
   ami_name        = "${var.ami_name}"
   ami_description = "AMI with Java, Maven and MySql"
-  ami_users       = [037023148215,556795868226]
+  ami_users       = ["037023148215","556795868226"]
 }
 
 build {
