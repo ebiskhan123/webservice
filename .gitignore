@@ -25,6 +25,8 @@ hs_err_pid*
 #build 
 /target*
 
+##nohup
+*.out
 
 # Intellij
 .idea/

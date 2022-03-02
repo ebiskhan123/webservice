@@ -44,11 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilterBefore(requestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
-    @Bean
-    public PasswordEncoder getPasswordEncoder() {
-//        return NoOpPasswordEncoder.getInstance();
-        return new BCryptPasswordEncoder();
-    }
+
 
 //    @Bean
 //    public AuthenticationFailureHandler authenticationFailureHandler() {

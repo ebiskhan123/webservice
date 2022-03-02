@@ -13,8 +13,8 @@
             <PatternLayout pattern="%-5level [%t] - %msg%n"/>
         </Console>
 
-        <RollingFile name ="MainLoggingFile" fileName="${env:LOG_DIR}/${filename}"
-                     filePattern = "./logs/${filepattern}">
+        <RollingFile name ="MainLoggingFile" fileName="${filename}"
+                     filePattern = "../logs/${filepattern}">
 
             <PatternLayout>
                 <Pattern>%d [%X{requestIdentifier}] [%t] %-5p -%m\n</Pattern>
@@ -27,7 +27,7 @@
             </Policies>
 
             <DefaultRolloverStrategy fileIndex="nomax">
-                <Delete basePath="./logs/rolledup">
+                <Delete basePath="../logs/rolledup">
                     <IfFileName glob="cloud_application-*-*.log">
                         <IfLastModified age="40d" />
                     </IfFileName>

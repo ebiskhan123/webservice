@@ -11,10 +11,10 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-    driverClassName: com.mysql.cj.jdbc.Driver
-    username: root
-    password:  Mypassword@123  #   mvn test -Dspring.datasource.password=<>
-    url: jdbc:mysql://localhost:3306/cloudservicedb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: sa  # Pokemon@123  mvn test -Dspring.datasource.password=Pokemon@123
+    url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1
 server:
   port: 8081
 
