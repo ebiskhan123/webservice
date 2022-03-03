@@ -8,7 +8,7 @@ To set up maven use the tutorial in the link : https://www.baeldung.com/install-
 ## Database
 We are utilizing  **MySQL** and **JPA** to perform database operations.
 
-## Environment Variables or VM arguments.
+## Environment Variables or VM arguments
 	 salt=<thesaltofyourchoice>
 	 dbpwd=<YourDatabasePassword>
 Please enter it as in your VM arguments
