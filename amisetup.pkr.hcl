@@ -68,7 +68,7 @@ build {
   }
   provisioner "shell" {
     scripts = [
-      "./buildscript.sh",
+      "./presetup.sh",
     ]
   }
   provisioner "shell" {
