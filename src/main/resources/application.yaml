@@ -12,9 +12,9 @@ spring:
       ddl-auto: update
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    username: root
-    password:  Mypassword@123  #   mvn test -Dspring.datasource.password=<>
-    url: jdbc:mysql://localhost:3306/cloudservicedb
+    username: ${MYSQL_USER}
+    password:  MyPassword123  #   mvn test -Dspring.datasource.password=<>
+    url: jdbc:mysql://${MYSQL_HOST}:3306/${MYSQL_DATABASE}
 server:
   port: 8081
 

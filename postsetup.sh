@@ -4,7 +4,7 @@ sudo mvn install -DskipTests=true
 sudo chmod 777 ./target/assignment-1.0-SNAPSHOT.jar
 cd ..
 echo '#!/bin/bash 
-java -jar home/ec2-user/webservice/target/assignment-1.0-SNAPSHOT.jar' > runjar.sh
+java -DMYSQL_HOST=${MYSQL_HOST} -DMYSQL_USER=${MYSQL_USER} -DMYSQL_DATABASE=${MYSQL_DATABASE} -jar home/ec2-user/webservice/target/assignment-1.0-SNAPSHOT.jar' > runjar.sh
 
 sudo chmod 777 runjar.sh
 

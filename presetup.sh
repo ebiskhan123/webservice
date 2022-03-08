@@ -21,19 +21,19 @@ echo java -version | awk '/version/{print $NF}'
 
 
 # Get the repo RPM and install it.
-sudo wget http://dev.mysql.com/get/mysql57-community-release-el7-7.noarch.rpm 
-sudo yum -y install ./mysql57-community-release-el7-7.noarch.rpm 
-
-# Install the server and start it
-sudo yum -y install mysql-community-server --nogpgcheck 
-sudo systemctl start mysqld 
-
-# Get the temporary password
-temp_password=$(sudo grep 'temporary password' /var/log/mysqld.log | awk '{print $NF}')
-
-temppass=$(sudo grep 'temporary password' /var/log/mysqld.log | awk '{print $NF}')
-
-echo $temp_password
+#sudo wget http://dev.mysql.com/get/mysql57-community-release-el7-7.noarch.rpm
+#sudo yum -y install ./mysql57-community-release-el7-7.noarch.rpm
+#
+## Install the server and start it
+#sudo yum -y install mysql-community-server --nogpgcheck
+#sudo systemctl start mysqld
+#
+## Get the temporary password
+#temp_password=$(sudo grep 'temporary password' /var/log/mysqld.log | awk '{print $NF}')
+#
+#temppass=$(sudo grep 'temporary password' /var/log/mysqld.log | awk '{print $NF}')
+#
+#echo $temp_password
 
 # sudo wget https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm
 # sudo rpm -Uvh mysql80-community-release-el7-3.noarch.rpm
@@ -47,15 +47,15 @@ echo $temp_password
 
 # sudo amazon-linux-extras | grep postgre Enter password: 
 
-echo "ALTER USER 'root'@'localhost' IDENTIFIED BY 'Mypassword@123'; flush privileges;" > reset_pass.sql
-# echo "CREATE DATABASE cloudservicedb;" > create_db.sql
-
-mysql -u root --password="$temp_password" --connect-expired-password < reset_pass.sql
-mysql -u root --password="Mypassword@123" -e "CREATE DATABASE cloudservicedb;"
-
-export dbpwd=Mypassword@123
-echo 'Environment variable set for dbpwd as : '
-printenv dbpwd
+#echo "ALTER USER 'root'@'localhost' IDENTIFIED BY 'Mypassword@123'; flush privileges;" > reset_pass.sql
+## echo "CREATE DATABASE cloudservicedb;" > create_db.sql
+#
+#mysql -u root --password="$temp_password" --connect-expired-password < reset_pass.sql
+#mysql -u root --password="Mypassword@123" -e "CREATE DATABASE cloudservicedb;"
+#
+#export dbpwd=Mypassword@123
+#echo 'Environment variable set for dbpwd as : '
+#printenv dbpwd
 
 #mysql -u root -p "Mypassword@123" -e "show databases;"
 
