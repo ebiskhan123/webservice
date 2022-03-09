@@ -13,7 +13,7 @@ spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     username: ${MYSQL_USER}
-    password:  MyPassword123  #   mvn test -Dspring.datasource.password=<>
+    password: ${MYSQL_PASSWORD}  #   mvn test -Dspring.datasource.password=<>
     url: jdbc:mysql://${MYSQL_HOST}:3306/${MYSQL_DATABASE}
 server:
   port: 8081
@@ -21,6 +21,9 @@ server:
 logging.config:
   classpath: log4j2.xml
 
+cloud:
+  aws:
+    bucketname: ${S3_BUCKETNAME}
 #encryption:
 #  salt: ${salt}
 #  spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
