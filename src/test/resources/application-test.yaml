@@ -20,7 +20,9 @@ server:
 
 logging.config:
   classpath: log4j2.xml
-
+cloud:
+  aws:
+    bucketname: bucket
 #encryption:
 #  salt: ${salt}
 #  spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
