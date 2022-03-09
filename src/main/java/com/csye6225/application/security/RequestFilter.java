@@ -50,9 +50,8 @@ public class RequestFilter extends OncePerRequestFilter {
                 usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }else {
-                httpServletResponse.setStatus(HttpStatus.FORBIDDEN.value());
+                httpServletResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
             }
-
 
         }
         filterChain.doFilter(httpServletRequest,httpServletResponse);
