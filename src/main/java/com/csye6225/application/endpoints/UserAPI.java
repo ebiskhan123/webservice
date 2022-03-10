@@ -105,6 +105,11 @@ public class UserAPI {
         try{
 
         System.out.println(basicToken);
+        String tempfilename = file.getOriginalFilename();
+            if(!(tempfilename.endsWith("png")||tempfilename.endsWith("jpg")||tempfilename.endsWith("jpeg"))){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Invalid file type"));
+                }
+
         String username = tokenUtils.extractUserName(basicToken);
         User user = userRepository.findByUsername(username);
         if (user == null)
