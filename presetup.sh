@@ -18,7 +18,7 @@ sudo yum -y install maven
 # java -version
 
 echo java -version | awk '/version/{print $NF}'
-
+sudo yum -y install mysql
 
 # Get the repo RPM and install it.
 #sudo wget http://dev.mysql.com/get/mysql57-community-release-el7-7.noarch.rpm
