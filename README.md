@@ -1,6 +1,6 @@
 
 # Webservice
-Repo for CSYE6225 course assignments and projects
+Repo for CSYE6225 course assignments and projects.
 ## Prerequisites
 This project would require **Java 8** and **Maven** to be set up.  
 To set up maven use the tutorial in the link : https://www.baeldung.com/install-maven-on-windows-linux-mac
