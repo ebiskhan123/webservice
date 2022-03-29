@@ -1,4 +1,5 @@
 sudo systemctl stop mywebservice.service
+sudo systemctl disable mywebservice.service
 sudo systemctl daemon-reload
 cd /home/ec2-user
 cd webservice
@@ -17,4 +18,8 @@ sudo java -DMYSQL_PASSWORD=${MYSQL_PASSWORD} -DS3_BUCKETNAME=${S3_BUCKETNAME} -D
 sudo chmod 777 runjar.sh
 
 sudo systemctl daemon-reload
+
+sudo systemctl enable mywebservice.service
+#sudo systemctl start mywebservice.service
+#sudo systemctl reload application.service
 
