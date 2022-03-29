@@ -31,7 +31,6 @@ StandardError=syslog
 
 
 [Install]
-WantedBy=multi-user.target
-WantedBy=cloud-init.target" > mywebservice.service
+WantedBy=multi-user.target" > mywebservice.service
 
 sudo systemctl enable mywebservice.service
