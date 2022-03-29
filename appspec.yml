@@ -4,10 +4,10 @@ files:
   - source: ./
     destination: /home/ec2-user/webservice
 hooks:
-  ApplicationStop:
-    - location: ./scripts/applicationStop.sh
-      timeout: 180
-      runas: root
+#  ApplicationStop:
+#    - location: ./scripts/applicationStop.sh
+#      timeout: 180
+#      runas: root
   BeforeInstall:
     - location: ./scripts/beforeInstall.sh
       timeout: 180
