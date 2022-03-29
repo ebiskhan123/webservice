@@ -43,5 +43,8 @@ StandardError=syslog
 WantedBy=multi-user.target
 WantedBy=cloud-init.target" > mywebservice.service
 
+sudo systemctl daemon-reload
 
 sudo systemctl enable mywebservice.service
+
+sudo systemctl reload application.service
