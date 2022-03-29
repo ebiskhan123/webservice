@@ -1,7 +1,8 @@
 sudo systemctl stop mywebservice.service
-sudo systemctl disable mywebservice.service
+#sudo systemctl disable mywebservice.service
 sudo systemctl daemon-reload
 cd /home/ec2-user
+sudo chown ec2-user *
 cd webservice
 sudo mvn install -DskipTests=true
 sudo chmod 777 ./target/assignment-1.0-SNAPSHOT.jar
@@ -19,7 +20,7 @@ sudo chmod 777 runjar.sh
 
 sudo systemctl daemon-reload
 
-sudo systemctl enable mywebservice.service
+#sudo systemctl enable mywebservice.service
 #sudo systemctl start mywebservice.service
 #sudo systemctl reload application.service
 
