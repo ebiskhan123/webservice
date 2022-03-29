@@ -8,12 +8,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Service
 @RestController
-@RequestMapping("/heal")
+@RequestMapping("/healthz")
 public class Health {
 
     // assignment 1 api
     @GetMapping()
     public ResponseEntity<?> getHealthz() {
+        return ResponseEntity.ok().body(null);
+    }
+
+    @GetMapping(value = "/demohealth")
+    public ResponseEntity<?> getHealth(){
         return ResponseEntity.ok().body(null);
     }
 
