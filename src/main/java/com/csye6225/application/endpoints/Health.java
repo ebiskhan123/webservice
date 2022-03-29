@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Service
 @RestController
-@RequestMapping("/healthz:")
+@RequestMapping("/heal")
 public class Health {
 
     // assignment 1 api
