@@ -22,5 +22,5 @@ sudo systemctl daemon-reload
 
 #sudo systemctl enable mywebservice.service
 #sudo systemctl start mywebservice.service
-#sudo systemctl reload application.service
+sudo systemctl reload mywebservice.service
 
