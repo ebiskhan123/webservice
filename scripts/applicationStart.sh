@@ -1,7 +1,7 @@
 sudo systemctl disable mywebservice.service
 sudo systemd-resolve --flush-caches
 sudo systemctl daemon-reload
-sudo systemctl enable mywebservice.service
+sudo systemctl --now enable mywebservice.service
 #sudo systemctl reboot
 
 
