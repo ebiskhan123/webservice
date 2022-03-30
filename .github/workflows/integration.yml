@@ -58,25 +58,25 @@ jobs:
 
   code_deploy:
     runs-on: ubuntu-latest
-    name: Run CodeDeploy
+    name: Deploying code to server
     steps:
-      - name: Step 1 - Checkout code
+      - name: Checking out code
         uses: actions/checkout@v2
 
-      - name: Step 2 - Install AWS Cli
+      - name: Setup AWS CLI
         run: sudo pip install awscli
 
-      - name: Step 3 - Set correct aws environment
+      - name: Configure AWS env
         run: |
           aws configure set region us-east-1
           aws configure set aws_access_key_id ${{ secrets.GHUSER_ACCESS_KEY }}
           aws configure set aws_secret_access_key ${{ secrets.GHUSER_SECRET_KEY }}
 
-      - name: Step 4 - Upload Artifact/zip files to s3 bucket
+      - name: Upload to S3
         run: |
           aws deploy push --application-name csye6225-webapp --s3-location s3://${{ secrets.AWS_BUCKET_NAME }}/${{ env.ARTIFACT_NAME }}.zip
 
-      - name: Step 5 - Create Deployment
+      - name: Call Create Deployment
         run: |
           aws deploy create-deployment \
           --application-name csye6225-webapp \
