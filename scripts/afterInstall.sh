@@ -1,4 +1,4 @@
-sudo systemctl stop mywebservice.service
+sudo systemctl disable mywebservice.service
 #sudo systemctl disable mywebservice.service
 sudo systemctl daemon-reload
 cd /home/ec2-user
