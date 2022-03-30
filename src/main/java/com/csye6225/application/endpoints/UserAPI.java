@@ -22,7 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RestController
-@RequestMapping("/v2")
+@RequestMapping("/v1")
 public class UserAPI {
 
     @Autowired
