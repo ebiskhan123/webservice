@@ -76,4 +76,10 @@ build {
       "./postsetup.sh",
     ]
   }
+  provisioner "shell" {
+    environment_vars = ["CURRENTREGION=${var.ami_region}"]
+    scripts = [
+      "./codedeploy.sh",
+    ]
+  }
 }

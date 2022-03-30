@@ -1,0 +1,22 @@
+version: 0.0
+os: linux
+files:
+  - source: ./
+    destination: /home/ec2-user/webservice
+hooks:
+#  ApplicationStop:
+#    - location: ./scripts/applicationStop.sh
+#      timeout: 180
+#      runas: root
+  BeforeInstall:
+    - location: ./scripts/beforeInstall.sh
+      timeout: 180
+      runas: ec2-user
+#  AfterInstall:
+#    - location: ./scripts/afterInstall.sh
+#      timeout: 180
+#      runas: ec2-user
+  ApplicationStart:
+    - location: ./scripts/applicationStart.sh
+      timeout: 180
+      runas: ec2-user

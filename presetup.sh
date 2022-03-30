@@ -15,7 +15,6 @@ sudo yum -y update
 sudo yum -y install java-1.8.0-openjdk
 
 sudo yum -y install maven
-# java -version
 
 echo java -version | awk '/version/{print $NF}'
 sudo yum -y install mysql
