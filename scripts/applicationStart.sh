@@ -20,7 +20,7 @@ sudo chmod 777 runjar.sh
 
 #sudo systemctl daemon-reload
 
-
+sudo kill -9 $(sudo lsof -t -i:8081)
 
 #sudo systemctl enable mywebservice.service
 #sudo systemd-resolve --flush-caches
@@ -28,7 +28,7 @@ sudo chmod 777 runjar.sh
 #sudo systemctl kill mywebservice.service
 sudo systemctl --now enable mywebservice.service
 
-sudo systemctl status mywebservice.service
+#sudo systemctl status mywebservice.service
 #sudo journalctl -u mywebservice.service -f
 
 #sudo systemctl reboot

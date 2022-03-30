@@ -17,7 +17,7 @@ public class Health {
         return ResponseEntity.ok().body(null);
     }
 
-    @GetMapping(value = "/demoheal1")
+    @GetMapping(value = "/demoz")
     public ResponseEntity<?> getHealth(){
         return ResponseEntity.ok().body(null);
     }
