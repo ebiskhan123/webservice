@@ -1,6 +1,6 @@
 sudo systemctl stop mywebservice.service
 #sudo systemctl disable mywebservice.service
-sudo systemctl daemon-reload
+#sudo systemctl daemon-reload
 cd /home/ec2-user
 sudo chown ec2-user *
 cd webservice
@@ -18,18 +18,18 @@ sudo java -DMYSQL_PASSWORD=${MYSQL_PASSWORD} -DS3_BUCKETNAME=${S3_BUCKETNAME} -D
 
 sudo chmod 777 runjar.sh
 
-sudo systemctl daemon-reload
+#sudo systemctl daemon-reload
 
 
 
-sudo systemctl disable mywebservice.service
-sudo systemd-resolve --flush-caches
-sudo systemctl daemon-reload
-sudo systemctl kill mywebservice.service
+#sudo systemctl enable mywebservice.service
+#sudo systemd-resolve --flush-caches
+#sudo systemctl daemon-reload
+#sudo systemctl kill mywebservice.service
 sudo systemctl --now enable mywebservice.service
 
 sudo systemctl status mywebservice.service
-sudo journalctl -u mywebservice.service -f
+#sudo journalctl -u mywebservice.service -f
 
 #sudo systemctl reboot
 
