@@ -10,6 +10,8 @@ import com.csye6225.application.security.BucketCreated;
 import com.csye6225.application.security.BucketName;
 import com.csye6225.application.security.TokenUtils;
 import com.csye6225.application.services.ImageServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,8 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/v1")
 public class UserAPI {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserAPI.class);
 
     @Autowired
     UserRepository userRepository;
@@ -48,6 +52,7 @@ public class UserAPI {
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity createUser(@RequestBody User user){
         try {
+            LOGGER.info("Creating a user endpoint called");
             user.setPassword(passwordEncoder.encode( user.getPassword()));
             User temp = userRepository.findByUsername(user.getUsername());
             if (userRepository.findByUsername(user.getUsername()) == null) {
@@ -66,6 +71,7 @@ public class UserAPI {
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity updateUser(@RequestBody User user , @RequestHeader("Authorization") String basicToken){
         try {
+            LOGGER.info("Update user details  endpoint called");
             if(!tokenUtils.extractUserName(basicToken).equals(user.getUsername())){
                 return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Credentials do not match the user being updated");
             }
@@ -85,7 +91,7 @@ public class UserAPI {
     @GetMapping(value = "/user/self",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> getUser(@RequestHeader("Authorization") String basicToken){
-
+        LOGGER.info("User details requested");
         System.out.println(basicToken);
         String username = tokenUtils.extractUserName(basicToken);
         User user = userRepository.findByUsername(username);
@@ -103,7 +109,7 @@ public class UserAPI {
     )
     public ResponseEntity<?> postPic(@RequestHeader("Authorization") String basicToken, @RequestPart("file") MultipartFile file ) {
         try{
-
+            LOGGER.info("Insert picture into S3 bucket endpoint called");
         System.out.println(basicToken);
         String tempfilename = file.getOriginalFilename();
             if(!(tempfilename.endsWith("png")||tempfilename.endsWith("jpg")||tempfilename.endsWith("jpeg"))){
@@ -141,6 +147,7 @@ public class UserAPI {
     }
 
     private Image updateImage(Image checkImage, User user, MultipartFile file) {
+        LOGGER.info("Method to update image is called");
         performDelete(checkImage, user);
         Image img = Image.builder().userId(user.getId()).fileName(file.getOriginalFilename()).build();
 //        Image tempimg = imageRepository.save(img);
@@ -157,6 +164,7 @@ public class UserAPI {
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> getPic(@RequestHeader("Authorization") String basicToken){
         try {
+            LOGGER.info("Endpoint to retrieve picture is called");
             System.out.println(basicToken);
             String username = tokenUtils.extractUserName(basicToken);
             User user = userRepository.findByUsername(username);
@@ -178,6 +186,7 @@ public class UserAPI {
             produces={MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?>deletePic(@RequestHeader("Authorization")String basicToken){
     try{
+        LOGGER.info("Endpoint to delete picture is called");
         System.out.println(basicToken);
         String username=tokenUtils.extractUserName(basicToken);
         User user=userRepository.findByUsername(username);

@@ -28,6 +28,10 @@ sudo kill -9 $(sudo lsof -t -i:8081)
 #sudo systemctl kill mywebservice.service
 sudo systemctl --now enable mywebservice.service
 
+
+sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/home/ec2-user/webservice/amazon-cloudwatch-config.json -s
+
+
 #sudo systemctl status mywebservice.service
 #sudo journalctl -u mywebservice.service -f
 
