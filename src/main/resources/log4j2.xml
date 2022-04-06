@@ -3,7 +3,7 @@
 
     <Properties>
 
-        <Property name="filename">cloud_application.log</Property>
+        <Property name="filename">./cloud_application.log</Property>
         <Property name="filepattern">cloud_application-%d{MM-dd-yyyy}-%i.log</Property>
 
     </Properties>

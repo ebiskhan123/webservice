@@ -21,11 +21,13 @@ Description= Web Service for CSYE6225
 After=syslog.target
 
 [Service]
-User=ec2-user
-ExecStart=/home/ec2-user/runjar.sh
+User=root
+EnvironmentFile=/etc/systemd/system/db.env
+ExecStart=/usr/bin/java -Dlogging.file=/home/ec2-user/webservice/target/my_logfile.log -jar /home/ec2-user/webservice/target/assignment-1.0-SNAPSHOT.jar
 SuccessExitStatus=143
 Restart=always
 RestartSec=10
+SyslogIdentifier=webservice-app
 StandardOutput=syslog
 StandardError=syslog
 

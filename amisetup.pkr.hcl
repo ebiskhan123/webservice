@@ -82,4 +82,9 @@ build {
       "./codedeploy.sh",
     ]
   }
+  provisioner "shell" {
+      scripts = [
+      "./cloudwatch.sh",
+    ]
+  }
 }

@@ -15,6 +15,8 @@ spring:
     username: ${MYSQL_USER}
     password: ${MYSQL_PASSWORD}  #   mvn test -Dspring.datasource.password=<>
     url: jdbc:mysql://${MYSQL_HOST}:3306/${MYSQL_DATABASE}
+    #jdbc:mysql://localhost:3306/cloudservicedb?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    #jdbc:mysql://${MYSQL_HOST}:3306/${MYSQL_DATABASE}
 server:
   port: 8081
 
@@ -34,3 +36,23 @@ cloud:
 #  spring.datasource.username=test
 #  spring.datasource.password=
 
+management:
+  metrics:
+    export:
+      statsd:
+        host: localhost
+        port: 8125
+        flavor: telegraf
+        enabled: true
+        protocol: udp
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics
+
+#  management.metrics.export.statsd.host=localhost
+#  management.metrics.export.statsd.port=8125
+#  management.metrics.export.statsd.flavor=etsy
+#  management.metrics.export.statsd.step=2m
+#  management.metrics.export.statsd.enabled=true
+#  management.endpoints.web.exposure.include=health,metrics
