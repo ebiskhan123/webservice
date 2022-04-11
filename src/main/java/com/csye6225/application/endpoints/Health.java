@@ -71,6 +71,7 @@ public class Health {
 
         }
         catch (Exception e) {
+            LOGGER.error(e.toString());
             System.err.println("Create items failed.");
             System.err.println(e.getMessage());
 
