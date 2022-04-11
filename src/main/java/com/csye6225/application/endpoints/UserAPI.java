@@ -112,6 +112,7 @@ public class UserAPI {
             } else
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("username already exists, try a different one"));
         }catch (Exception e){
+            LOGGER.error(e.toString());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Unable to create user, check if input data is correct"));
         }
     }
