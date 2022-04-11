@@ -3,6 +3,7 @@ package com.csye6225.application.objects;
 import com.csye6225.application.repository.UserRepository;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -49,5 +50,10 @@ public class User {
     @Column(nullable = false)
     @UpdateTimestamp
     private Date account_updated;
+
+//    @Column()
+//    @Builder.Default
+//    @ColumnDefault("false")
+//    private Boolean verified = false;
 
 }
