@@ -39,8 +39,9 @@ public class Health {
     private AmazonDynamoDB client;
     @PostConstruct
     void init(){
-        client = AmazonDynamoDBClientBuilder.standard().withCredentials(new InstanceProfileCredentialsProvider(false))
-                .withRegion("us-east-1").build();
+        client =  AmazonDynamoDBClientBuilder.standard().withCredentials(new InstanceProfileCredentialsProvider(false))
+                       .withRegion("us-east-1").build();
+
         dynamoDB = new DynamoDB(client);
     }
 
@@ -57,9 +58,9 @@ public class Health {
         Table table = dynamoDB.getTable(tableName);
         try {
 
-            Item item = new Item().withString("email", "ebiskhan123")
-                    .withLong("ttl",(System.currentTimeMillis() / 1000L)+ 60000)
-                    .withString("emailid", "ebishkhan@gmail.com");
+            Item item = new Item().withString("email", "ebiskhan1231")
+                    .withLong("ttl",(System.currentTimeMillis() / 1000L)+ 60)
+                    .withString("emailid", "ebishkhan@gmail1.com");
             table.putItem(item);
 
 //            item = new Item().withPrimaryKey("Id", 121).withString("Title", "Book 121 Title")
