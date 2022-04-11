@@ -33,17 +33,6 @@ public class Health {
 //    @Autowired
 //    AmazonDynamoDB client;
 
-    private DynamoDB dynamoDB;
-
-    static String tableName = "emailTokenTbl";
-    private AmazonDynamoDB client;
-    @PostConstruct
-    void init(){
-        client =  AmazonDynamoDBClientBuilder.standard().withCredentials(new InstanceProfileCredentialsProvider(false))
-                       .withRegion("us-east-1").build();
-
-        dynamoDB = new DynamoDB(client);
-    }
 
     @GetMapping()
     public ResponseEntity<?> getHealthz() {
@@ -55,28 +44,6 @@ public class Health {
     @GetMapping(value = "/health2")
     public ResponseEntity<?> getHealth(){
 
-        Table table = dynamoDB.getTable(tableName);
-        try {
-
-            Item item = new Item().withString("email", "ebiskhan1231")
-                    .withLong("ttl",(System.currentTimeMillis() / 1000L)+ 60)
-                    .withString("emailid", "ebishkhan@gmail1.com");
-            table.putItem(item);
-
-//            item = new Item().withPrimaryKey("Id", 121).withString("Title", "Book 121 Title")
-//                    .withString("ISBN", "121-1111111111")
-//                    .withStringSet("Authors", new HashSet<String>(Arrays.asList("Author21", "Author 22")))
-//                    .withNumber("Price", 20).withString("Dimensions", "8.5x11.0x.75").withNumber("PageCount", 500)
-//                    .withBoolean("InPublication", true).withString("ProductCategory", "Book");
-//            table.putItem(item);
-
-        }
-        catch (Exception e) {
-            LOGGER.error(e.toString());
-            System.err.println("Create items failed.");
-            System.err.println(e.getMessage());
-
-        }
         return ResponseEntity.ok().body(null);
     }
 

@@ -1,5 +1,11 @@
 package com.csye6225.application.endpoints;
 
+import com.amazonaws.auth.InstanceProfileCredentialsProvider;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
+import com.amazonaws.services.dynamodbv2.document.DynamoDB;
+import com.amazonaws.services.dynamodbv2.document.Item;
+import com.amazonaws.services.dynamodbv2.document.Table;
 import com.csye6225.application.MetricRegistry;
 import com.csye6225.application.objects.ErrorResponse;
 import com.csye6225.application.objects.Image;
@@ -22,6 +28,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.annotation.PostConstruct;
+import java.util.UUID;
 
 @Service
 @RestController
@@ -52,6 +61,22 @@ public class UserAPI {
     MetricRegistry metricRegistry;
 
 
+
+    private DynamoDB dynamoDB;
+
+    private static String tableName = "emailTokenTbl";
+    private AmazonDynamoDB client;
+
+
+    @PostConstruct
+    void init(){
+        client =  AmazonDynamoDBClientBuilder.standard().withCredentials(new InstanceProfileCredentialsProvider(false))
+                .withRegion("us-east-1").build();
+
+        dynamoDB = new DynamoDB(client);
+    }
+
+
     @PostMapping(value = "/user",
             consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -59,17 +84,45 @@ public class UserAPI {
         try {
             metricRegistry.getInstance().counter("Create User","csye6225","createuser endpoint").increment();
             LOGGER.info("Creating a user endpoint called");
+
+
+
+
             user.setPassword(passwordEncoder.encode( user.getPassword()));
             User temp = userRepository.findByUsername(user.getUsername());
             if (userRepository.findByUsername(user.getUsername()) == null) {
                 userRepository.save(user);
                 User userLatest = userRepository.findByUsername(user.getUsername());
+                Table table = dynamoDB.getTable(tableName);
+//                try {
+
+                    Item item = new Item().withString("email", user.getUsername())
+                            .withLong("ttl",(System.currentTimeMillis() / 1000L)+ 60)
+                            .withString("token",generateUniqueId() );
+                    table.putItem(item);
+
+//                }
+//                catch (Exception e) {
+//                    LOGGER.error(e.toString());
+//                    System.err.println("Create items failed.");
+//                    System.err.println(e.getMessage());
+//
+//                }
                 return ResponseEntity.status(HttpStatus.CREATED).body(userLatest);
             } else
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("username already exists, try a different one"));
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Unable to create user, check if input data is correct"));
         }
+    }
+
+    private static String generateUniqueId() {
+        UUID idOne = UUID.randomUUID();
+        String str=""+idOne;
+        long uid=str.hashCode();
+        String filterStr=""+uid;
+        str=filterStr.replaceAll("-", "");
+        return str;
     }
 
     @PutMapping(value = "/user/self",
