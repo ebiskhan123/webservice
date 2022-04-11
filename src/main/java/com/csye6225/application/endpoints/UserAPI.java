@@ -96,7 +96,8 @@ public class UserAPI {
                 Table table = dynamoDB.getTable(tableName);
 //                try {
 
-                    Item item = new Item().withString("email", user.getUsername())
+                    Item item = new Item().withString("emailid",user.getUsername())
+                            .withString("email", user.getUsername())
                             .withLong("ttl",(System.currentTimeMillis() / 1000L)+ 60)
                             .withString("token",generateUniqueId() );
                     table.putItem(item);
