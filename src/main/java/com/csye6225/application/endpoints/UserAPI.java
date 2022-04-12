@@ -103,6 +103,7 @@ public class UserAPI {
             user.setPassword(passwordEncoder.encode( user.getPassword()));
             User temp = userRepository.findByUsername(user.getUsername());
             if (userRepository.findByUsername(user.getUsername()) == null) {
+                user.setVerified(false);
                 userRepository.save(user);
                 User userLatest = userRepository.findByUsername(user.getUsername());
                 Table table = dynamoDB.getTable(tableName);
