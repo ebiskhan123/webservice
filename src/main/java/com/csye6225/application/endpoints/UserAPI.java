@@ -138,23 +138,25 @@ public class UserAPI {
     }
 
 
-//    http://prod.domain.tld/v1/verifyUserEmail?email=user@example.com&token=sometoken
+//    http://prod.domain.tld/v1/verifyUserEmail?email=ebenezerwilliams@northeastern.edu&token=1564076567
 //    arn:aws:sns:us-east-1:556795868226:UserVerificationTopic
+//    ebenezerwilliams@northeastern.edu
 
     @GetMapping(value = "/verifyUserEmail",
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> verifyUser(@RequestParam("email") String email, @RequestParam("token") String token ){
 
         metricRegistry.getInstance().counter("verifyUser get","csye6225","verifyUser endpoint").increment();
-        LOGGER.info("verifyUser requested");
+        LOGGER.info("verifyUser requested"+email + " " +token);
 
         Table table = dynamoDB.getTable(tableName);
-        Map<String,Object> itemmap = table.getItem("emailid", email, "emailid email token",null).asMap();
-        if(itemmap.get("emailid").equals(email) && itemmap.get("token").equals(token)){
-            User presentUser = userRepository.findByUsername(email);
-            presentUser.setVerified(true);
-            userRepository.save(presentUser);
-        }
+        Item item = table.getItem("emailid", email, "emailid email token",null);
+        LOGGER.info(item.toString());
+        //        if(itemmap.get("emailid").equals(email) && itemmap.get("token").equals(token)){
+//            User presentUser = userRepository.findByUsername(email);
+//            presentUser.setVerified(true);
+//            userRepository.save(presentUser);
+//        }
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body( null);
     }
