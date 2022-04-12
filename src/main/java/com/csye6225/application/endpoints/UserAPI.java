@@ -118,17 +118,6 @@ public class UserAPI {
                 messagePublisher.publish(message);
                 LOGGER.info("Message published");
 
-//                Map<String, MessageAttributeValue> smsAttributes = new HashMap<String, MessageAttributeValue>();
-//                smsAttributes.put("AWS.SNS.SMS.SenderID",new MessageAttributeValue().withStringValue("SENDER-ID").withDataType("String");
-//                smsAttributes.put("AWS.SNS.SMS.SMSType",new MessageAttributeValue().withStringValue("Transactional").withDataType("String"));
-//
-//                PublishRequest request = new PublishRequest();
-//                request.withMessage("YOUR MESSAGE")
-//                        .withPhoneNumber("E.164-PhoneNumber")
-//                        .withMessageAttributes(smsAttributes);
-//                PublishResult result=snsClient.publish(request);
-
-
                 return ResponseEntity.status(HttpStatus.CREATED).body(userLatest);
             } else
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("username already exists, try a different one"));
@@ -159,7 +148,13 @@ public class UserAPI {
         LOGGER.info("verifyUser requested");
 
         Table table = dynamoDB.getTable(tableName);
-        Item item = table.getItem("emailid", email, "emailid email token",null);
+        Map<String,Object> itemmap = table.getItem("emailid", email, "emailid email token",null).asMap();
+        if(itemmap.get("emailid").equals(email) && itemmap.get("token").equals(token)){
+            User presentUser = userRepository.findByUsername(email);
+            presentUser.setVerified(true);
+            userRepository.save(presentUser);
+        }
+
         return ResponseEntity.status(HttpStatus.ACCEPTED).body( null);
     }
 
@@ -212,8 +207,11 @@ public class UserAPI {
         System.out.println(basicToken);
         String username = tokenUtils.extractUserName(basicToken);
         User user = userRepository.findByUsername(username);
+
         if(user ==null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body( new ErrorResponse("User not found"));
+        if(!user.getVerified())
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body( new ErrorResponse("User not verified"));
         UserDTO userDTO = UserDTO.builder().firstName(user.getFirstName()).lastName(user.getLastName()).
                 account_created(user.getAccount_created()).account_updated(user.getAccount_updated()).id(user.getId())
                 .username(user.getUsername()).build();

@@ -51,9 +51,9 @@ public class User {
     @UpdateTimestamp
     private Date account_updated;
 
-//    @Column()
-//    @Builder.Default
-//    @ColumnDefault("false")
-//    private Boolean verified = false;
+    @Column(nullable = false)
+    @Builder.Default
+    @ColumnDefault("false")
+    private Boolean verified = false;
 
 }
