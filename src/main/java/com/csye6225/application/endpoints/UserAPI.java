@@ -1,22 +1,27 @@
 package com.csye6225.application.endpoints;
 
+import com.amazonaws.auth.AWSCredentialsProvider;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.InstanceProfileCredentialsProvider;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.Table;
+import com.amazonaws.services.sns.AmazonSNS;
+import com.amazonaws.services.sns.AmazonSNSClientBuilder;
+import com.amazonaws.services.sns.model.MessageAttributeValue;
+import com.amazonaws.services.sns.model.PublishRequest;
+import com.amazonaws.services.sns.model.PublishResult;
 import com.csye6225.application.MetricRegistry;
-import com.csye6225.application.objects.ErrorResponse;
-import com.csye6225.application.objects.Image;
-import com.csye6225.application.objects.User;
-import com.csye6225.application.objects.UserDTO;
+import com.csye6225.application.objects.*;
 import com.csye6225.application.repository.ImageRepository;
 import com.csye6225.application.repository.UserRepository;
 import com.csye6225.application.security.BucketCreated;
 import com.csye6225.application.security.BucketName;
 import com.csye6225.application.security.TokenUtils;
 import com.csye6225.application.services.ImageServiceImpl;
+import com.csye6225.application.services.MessagePublisherImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +33,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.sns.SnsClient;
+import software.amazon.awssdk.services.sns.SnsClientBuilder;
+import software.amazon.awssdk.services.sns.model.SnsResponse;
 
 import javax.annotation.PostConstruct;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -60,19 +72,22 @@ public class UserAPI {
     @Autowired
     MetricRegistry metricRegistry;
 
-
+    @Autowired
+    MessagePublisherImpl messagePublisher;
 
     private DynamoDB dynamoDB;
 
     private static String tableName = "emailTokenTbl";
     private AmazonDynamoDB client;
-
+//    private SnsClient snsClient;
 
     @PostConstruct
     void init(){
         client =  AmazonDynamoDBClientBuilder.standard().withCredentials(new InstanceProfileCredentialsProvider(false))
                 .withRegion("us-east-1").build();
 
+
+//         snsClient = SnsClient.builder().region(Region.US_EAST_1).credentialsProvider(software.amazon.awssdk.auth.credentials.InstanceProfileCredentialsProvider.builder().build()).build();
         dynamoDB = new DynamoDB(client);
     }
 
@@ -85,30 +100,35 @@ public class UserAPI {
             metricRegistry.getInstance().counter("Create User","csye6225","createuser endpoint").increment();
             LOGGER.info("Creating a user endpoint called");
 
-
-
-
             user.setPassword(passwordEncoder.encode( user.getPassword()));
             User temp = userRepository.findByUsername(user.getUsername());
             if (userRepository.findByUsername(user.getUsername()) == null) {
                 userRepository.save(user);
                 User userLatest = userRepository.findByUsername(user.getUsername());
                 Table table = dynamoDB.getTable(tableName);
-//                try {
-
+                String tkn = generateUniqueId();
                     Item item = new Item().withString("emailid",user.getUsername())
                             .withString("email", user.getUsername())
                             .withLong("ttl",(System.currentTimeMillis() / 1000L)+ 60)
-                            .withString("token",generateUniqueId() );
+                            .withString("token",tkn);
                     table.putItem(item);
+                Message message = new Message(user.getUsername(),tkn,"publish message");
+                LOGGER.info(message.toString());
 
-//                }
-//                catch (Exception e) {
-//                    LOGGER.error(e.toString());
-//                    System.err.println("Create items failed.");
-//                    System.err.println(e.getMessage());
+                messagePublisher.publish(message);
+                LOGGER.info("Message published");
+
+//                Map<String, MessageAttributeValue> smsAttributes = new HashMap<String, MessageAttributeValue>();
+//                smsAttributes.put("AWS.SNS.SMS.SenderID",new MessageAttributeValue().withStringValue("SENDER-ID").withDataType("String");
+//                smsAttributes.put("AWS.SNS.SMS.SMSType",new MessageAttributeValue().withStringValue("Transactional").withDataType("String"));
 //
-//                }
+//                PublishRequest request = new PublishRequest();
+//                request.withMessage("YOUR MESSAGE")
+//                        .withPhoneNumber("E.164-PhoneNumber")
+//                        .withMessageAttributes(smsAttributes);
+//                PublishResult result=snsClient.publish(request);
+
+
                 return ResponseEntity.status(HttpStatus.CREATED).body(userLatest);
             } else
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("username already exists, try a different one"));
@@ -126,6 +146,40 @@ public class UserAPI {
         str=filterStr.replaceAll("-", "");
         return str;
     }
+
+
+//    http://prod.domain.tld/v1/verifyUserEmail?email=user@example.com&token=sometoken
+//    arn:aws:sns:us-east-1:556795868226:UserVerificationTopic
+
+    @GetMapping(value = "/verifyUserEmail",
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> verifyUser(@RequestParam("email") String email, @RequestParam("token") String token ){
+
+        metricRegistry.getInstance().counter("verifyUser get","csye6225","verifyUser endpoint").increment();
+        LOGGER.info("verifyUser requested");
+
+        Table table = dynamoDB.getTable(tableName);
+        Item item = table.getItem("emailid", email, "emailid email token",null);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body( null);
+    }
+
+//    private static void retrieveItem() {
+//        Table table = dynamoDB.getTable(tableName);
+//
+//        try {
+//
+//            Item item = table.getItem("Id", 120, "Id, ISBN, Title, Authors", null);
+//
+//            System.out.println("Printing item after retrieving it....");
+//            System.out.println(item.toJSONPretty());
+//
+//        }
+//        catch (Exception e) {
+//            System.err.println("GetItem failed.");
+//            System.err.println(e.getMessage());
+//        }
+//
+//    }
 
     @PutMapping(value = "/user/self",
             consumes = {MediaType.APPLICATION_JSON_VALUE},
