@@ -150,15 +150,18 @@ public class UserAPI {
         LOGGER.info("verifyUser requested"+email + " " +token);
 
         Table table = dynamoDB.getTable(tableName);
-        Item item = table.getItem("emailid", email);
-        LOGGER.info(item.toString());
-        //        if(itemmap.get("emailid").equals(email) && itemmap.get("token").equals(token)){
-//            User presentUser = userRepository.findByUsername(email);
-//            presentUser.setVerified(true);
-//            userRepository.save(presentUser);
-//        }
+        Map<String,Object> itemmap = table.getItem("emailid", email).asMap();
+        LOGGER.info(itemmap.toString());
+        if(itemmap.get("emailid").equals(email) && itemmap.get("token").equals(token)){
+            User presentUser = userRepository.findByUsername(email);
+            presentUser.setVerified(true);
+            userRepository.save(presentUser);
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body( "User has been verified successfully");
+        }else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( "User cannot be verified. Please check the credentials");
+        }
 
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body( null);
+
     }
 
 //    private static void retrieveItem() {
