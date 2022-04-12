@@ -150,7 +150,7 @@ public class UserAPI {
         LOGGER.info("verifyUser requested"+email + " " +token);
 
         Table table = dynamoDB.getTable(tableName);
-        Item item = table.getItem("emailid", email, "emailid, email, token",null);
+        Item item = table.getItem("emailid", email);
         LOGGER.info(item.toString());
         //        if(itemmap.get("emailid").equals(email) && itemmap.get("token").equals(token)){
 //            User presentUser = userRepository.findByUsername(email);
