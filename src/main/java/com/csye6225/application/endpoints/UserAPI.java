@@ -156,6 +156,8 @@ public class UserAPI {
 //        if(!verifyItem.isNull("userId")){
 //
 //        }
+try{
+
 
         Map<String,Object> itemmap = table.getItem("emailid", email).asMap();
         LOGGER.info(itemmap.toString());
@@ -171,7 +173,9 @@ public class UserAPI {
         }else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( "User cannot be verified. Please check the credentials");
         }
-
+} catch(Exception e){
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( "User cannot be verified. Please check the credentials");
+}
 
     }
 
