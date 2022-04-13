@@ -191,6 +191,7 @@ public class UserAPI {
                     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body( new ErrorResponse("User not verified"));
                 user.setId(presentUser.getId());
                 user.setPassword(passwordEncoder.encode( user.getPassword()));
+                user.setVerified(true);
                 userRepository.save(user);
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
             }
