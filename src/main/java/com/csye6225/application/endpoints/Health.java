@@ -1,5 +1,11 @@
 package com.csye6225.application.endpoints;
 
+import com.amazonaws.auth.InstanceProfileCredentialsProvider;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
+import com.amazonaws.services.dynamodbv2.document.DynamoDB;
+import com.amazonaws.services.dynamodbv2.document.Item;
+import com.amazonaws.services.dynamodbv2.document.Table;
 import com.csye6225.application.MetricRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +15,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.PostConstruct;
+import java.util.Arrays;
+import java.util.HashSet;
 
 @Service
 @RestController
@@ -20,6 +30,10 @@ public class Health {
     @Autowired
     MetricRegistry metricRegistry;
 
+//    @Autowired
+//    AmazonDynamoDB client;
+
+
     @GetMapping()
     public ResponseEntity<?> getHealthz() {
         metricRegistry.getInstance().counter("Health get","csye6225","health endpoint").increment();
@@ -29,6 +43,7 @@ public class Health {
 
     @GetMapping(value = "/health2")
     public ResponseEntity<?> getHealth(){
+
         return ResponseEntity.ok().body(null);
     }
 

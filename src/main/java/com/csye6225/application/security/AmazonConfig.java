@@ -1,9 +1,6 @@
 package com.csye6225.application.security;
 
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.auth.InstanceProfileCredentialsProvider;
+import com.amazonaws.auth.*;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +16,7 @@ public class AmazonConfig {
                 .build();
 
         return s3;
+
 //                AmazonS3ClientBuilder
 //                .standard()
 //                .withRegion("us-east-1")
@@ -26,4 +24,9 @@ public class AmazonConfig {
 //                .build();
 
     }
+
+//    @Bean
+//    public AWSCredentialsProvider awsCredentialsProvider() {
+//        return new InstanceProfileCredentialsProvider(false);
+//    }
 }
