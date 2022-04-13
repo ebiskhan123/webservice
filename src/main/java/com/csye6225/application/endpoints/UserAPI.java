@@ -106,11 +106,12 @@ public class UserAPI {
                 user.setVerified(false);
                 userRepository.save(user);
                 User userLatest = userRepository.findByUsername(user.getUsername());
+                LOGGER.info(""+userLatest.getVerified());
                 Table table = dynamoDB.getTable(tableName);
                 String tkn = generateUniqueId();
                     Item item = new Item().withString("emailid",user.getUsername())
                             .withString("email", user.getUsername())
-                            .withLong("ttl",(System.currentTimeMillis() / 1000L)+ 60)
+                            .withLong("ttl",(System.currentTimeMillis() / 1000L)+ 120)
                             .withString("token",tkn);
                     table.putItem(item);
                 Message message = new Message(user.getUsername(),tkn,"publish message");
@@ -148,24 +149,14 @@ public class UserAPI {
 
         metricRegistry.getInstance().counter("verifyUser get","csye6225","verifyUser endpoint").increment();
         LOGGER.info("verifyUser requested"+email + " " +token);
-
         Table table = dynamoDB.getTable(tableName);
-//        Table verificationTable = dynamoDB.getTable("SentMails");
-//        Item verifyItem = verificationTable.getItem("userId",email);
-//
-//        if(!verifyItem.isNull("userId")){
-//
-//        }
-try{
-
-
+        try{
         Map<String,Object> itemmap = table.getItem("emailid", email).asMap();
         LOGGER.info(itemmap.toString());
-//        long time = itemmap.get("ttl");
-//        if(time>Syste)
         if(itemmap.get("emailid").equals(email) && itemmap.get("token").equals(token)){
             User presentUser = userRepository.findByUsername(email);
-            if(presentUser.getVerified())
+            LOGGER.info("verify"+presentUser.getVerified());
+            if(presentUser.getVerified() == true)
                 return ResponseEntity.status(HttpStatus.ACCEPTED).body( "User has already been verified");
             presentUser.setVerified(true);
             userRepository.save(presentUser);
@@ -173,29 +164,12 @@ try{
         }else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( "User cannot be verified. Please check the credentials");
         }
-} catch(Exception e){
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( "User cannot be verified. Please check the credentials");
-}
+        } catch(Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( "User cannot be verified. Please check the credentials");
+        }
 
     }
 
-//    private static void retrieveItem() {
-//        Table table = dynamoDB.getTable(tableName);
-//
-//        try {
-//
-//            Item item = table.getItem("Id", 120, "Id, ISBN, Title, Authors", null);
-//
-//            System.out.println("Printing item after retrieving it....");
-//            System.out.println(item.toJSONPretty());
-//
-//        }
-//        catch (Exception e) {
-//            System.err.println("GetItem failed.");
-//            System.err.println(e.getMessage());
-//        }
-//
-//    }
 
     @PutMapping(value = "/user/self",
             consumes = {MediaType.APPLICATION_JSON_VALUE},
@@ -344,9 +318,6 @@ try{
         if (image == null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("No profile pic to delete"));
         performDelete(image,user);
-//        imageRepository.deleteById(image.getId());
-//        String path = String.format("%s/%s", BucketName.USER_IMAGE.getBucketName(), image.getId());
-//        service.deleteImage(path,image.getFileName());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }catch (Exception e){
         System.out.println(e);
