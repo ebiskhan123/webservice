@@ -46,7 +46,7 @@ import java.util.UUID;
 
 @Service
 @RestController
-@RequestMapping("/v2")
+@RequestMapping("/v1")
 public class UserAPI {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserAPI.class);
@@ -150,10 +150,21 @@ public class UserAPI {
         LOGGER.info("verifyUser requested"+email + " " +token);
 
         Table table = dynamoDB.getTable(tableName);
+//        Table verificationTable = dynamoDB.getTable("SentMails");
+//        Item verifyItem = verificationTable.getItem("userId",email);
+//
+//        if(!verifyItem.isNull("userId")){
+//
+//        }
+
         Map<String,Object> itemmap = table.getItem("emailid", email).asMap();
         LOGGER.info(itemmap.toString());
+//        long time = itemmap.get("ttl");
+//        if(time>Syste)
         if(itemmap.get("emailid").equals(email) && itemmap.get("token").equals(token)){
             User presentUser = userRepository.findByUsername(email);
+            if(presentUser.getVerified())
+                return ResponseEntity.status(HttpStatus.ACCEPTED).body( "User has already been verified");
             presentUser.setVerified(true);
             userRepository.save(presentUser);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body( "User has been verified successfully");
@@ -194,6 +205,8 @@ public class UserAPI {
             }
             User presentUser = userRepository.findByUsername(user.getUsername());
             if (presentUser != null) {
+                if(!presentUser.getVerified())
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body( new ErrorResponse("User not verified"));
                 user.setId(presentUser.getId());
                 user.setPassword(passwordEncoder.encode( user.getPassword()));
                 userRepository.save(user);
@@ -242,6 +255,8 @@ public class UserAPI {
         User user = userRepository.findByUsername(username);
         if (user == null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Invalid user"));
+        if(!user.getVerified())
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body( new ErrorResponse("User not verified"));
         Image checkImage = imageRepository.findByuserId(user.getId());
         if(checkImage!=null ){
             if( checkImage.getFileName().equals(file.getOriginalFilename()))
@@ -293,6 +308,8 @@ public class UserAPI {
             User user = userRepository.findByUsername(username);
             if (user == null)
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("User not found"));
+            if(!user.getVerified())
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body( new ErrorResponse("User not verified"));
             String userID = user.getId();
             Image image = imageRepository.findByuserId(userID);
             if (image == null)
@@ -316,6 +333,8 @@ public class UserAPI {
         User user=userRepository.findByUsername(username);
         if(user==null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("User not found"));
+        if(!user.getVerified())
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body( new ErrorResponse("User not verified"));
         String userID=user.getId();
         Image image=imageRepository.findByuserId(userID);
         if (image == null)
