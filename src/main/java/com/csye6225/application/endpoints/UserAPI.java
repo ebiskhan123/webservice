@@ -153,6 +153,7 @@ public class UserAPI {
         try{
         Map<String,Object> itemmap = table.getItem("emailid", email).asMap();
         LOGGER.info(itemmap.toString());
+        LOGGER.info(itemmap.get("token").toString()+ " " + (System.currentTimeMillis() / 1000L));
         if(Long.parseLong(itemmap.get("token").toString()) < (System.currentTimeMillis() / 1000L)){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( "Token Expired");
         }
